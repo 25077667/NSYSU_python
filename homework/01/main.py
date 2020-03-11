@@ -1,12 +1,7 @@
-a = "one"
-b = 2.0
-c = 3
-print(a, b, c)
+#! /usr/bin/python3
 
-# swap it
-t = a
-a = c
-c = b
-b = t
-
-print(a, b, c)
+print("B073040047")
+x = "A quick brown fox jumps over the lazy dog."
+print(sorted(list(set(x.lower()) - {' '} - {'.'}), reverse=True))
+y = """print(sorted(list(set(x.lower()) - {' '} - {'.'}), reverse=True))"""
+y += """!$#"""
