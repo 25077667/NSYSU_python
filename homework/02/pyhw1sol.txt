@@ -1,0 +1,36 @@
+# Here is my homework 1 solution:
+x = "A quick brown fox jumps over the lazy dog."
+print(sorted(set(x))[:1:-1][:-1])
+y="print(sorted(set(x))[:1:-1][:-1])"
+y="!#$"+y
+print(sorted(set(y))[:1:-1][:-1])
+
+# Now there is a function that we haven't learned yet, but which would have
+# made the homework more elegant: "exec()". This built-in function executes
+# the string that you pass in, as though you had typed that string as a
+# command. For example:
+#   >>> exec("print('Hello world')")
+#   Hello world
+#   >>>
+#
+# Here is a modified homework 1, using exec:
+x = "A quick brown fox jumps over the lazy dog."
+L3="print(sorted(set(x))[:1:-1][:-1])"
+exec(L3)
+x="!#$"+L3  # To let me reuse L3, I need to reuse x, not create a new string y.
+exec(L3)
+
+# If you run this file, you will get this output:
+#   % python3 pyhw1sol.py
+#   ['z', 'y', 'x', 'w', 'v', 'u', 't', 's', 'r', 'q', 'p', 'o', 'n', 'm', 'l',
+#   'k', 'j', 'i', 'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a']
+#   ['x', 't', 's', 'r', 'p', 'o', 'n', 'i', 'e', 'd', ']', '[', ':', '1', '-',
+#   ')', '(']
+#   ['z', 'y', 'x', 'w', 'v', 'u', 't', 's', 'r', 'q', 'p', 'o', 'n', 'm', 'l',
+#   'k', 'j', 'i', 'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a']
+#   ['x', 't', 's', 'r', 'p', 'o', 'n', 'i', 'e', 'd', ']', '[', ':', '1', '-',
+#   ')', '(']
+#   %
+#
+# From the above, we see that the output printed twice, thus showing that the
+# second version does, in fact, do the same thing as the first version.

@@ -1,0 +1,157 @@
+                           Programming Assignment #2
+
+Due: MONDAY April 6th at 2:00 pm.
+     No extensions will be given, because I will post the solution on Monday
+     evening. Why post the solution so early? Because our midterm will be April
+     7th (if the school is still open then -- in fact the rush to give the
+     midterm early is in case the school might move classes online later).
+
+Getting help: - The Professor has office hours on Monday from 12:30-2:30 and on
+                Friday from 10:00-12:00, in room 9037.  He can also be reached
+                by email (use stevewhaga@yahoo.com for faster response).
+              - The TA is also available to answer your questions.
+              - Questions about the assignment can be posted to the Discussion
+                Forum.
+              - You may discuss the ideas of the assignment with classmates.
+                Such discussions can be quite helpful for learning -- IF you
+                ONLY talk about the general concepts of the steps of the
+                assignment.
+              - If, however, you tell other students the specific details of
+                your implementation, then you are not helping each other to
+                learn; you are just doing the work for them.
+                In other words, you are cheating. You CANNOT show another
+                student ANY part of the answer to the assignment.
+
+Cheating policy:We encourage students to form study groups. But this does not
+                mean sharing code. If students are found to be sharing work,
+                they can receive a 0 for the entire course, or worse.
+                It is cheating to let another student see your work, or to let
+                them look over your shoulder when your code is on the screen.
+                A good way to know you cheated: if you have code that is in
+                your solution just because another student told you to put
+                it there, but you don't actually understand it.
+                If still unsure, you can ask the TA for more explanation.
+                We always look for evidence of cheating, so don't do it.
+                (In any event, even if you don't get caught, those who copy
+                will not learn the material, so they'll fail the exam.)
+
+Most Important  The programming assignments are a large part of the grade.
+Things to Know: This large point value means that, if you don't do them, you
+                may fail.
+                The large point value also explains why the policy against
+                cheating is strictly enforced.
+                  
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+We will now look at each line of the new homework assignment:
+
+Line 1: A comment that is your student ID number (eg, B033020099)
+
+Line 2: This uses multiple assignment to create two identical strings named
+        z and charactersUsed.
+
+        These two strings contain a print statement that gives all of the
+        unique characters in the string named s.
+
+Line 3: exec(charactersUsed)
+
+        The exec command was briefly discussed in the homework 1 solution that
+        I have posted. A longer discussion will be given in lecture 5.
+
+        Now, in the present case, the charactersUsed string was defined on Line
+        2, and contains a command to print the characters of the string z.
+        But z set on Line 2 to be the same as charactersUsed.
+
+        Therefore, this Line 3 will give all of the unique characters in the
+        string you defined on Line 2. The output is provided for you on Line 4:
+        
+Line 4: # {'n', '*', 'i', 'r', 'z', '}', '(', ')', 't', '{', 'p'}
+
+        -Notice that Line 4 is a comment. You type it as it is.
+        -Notice that Line 4 indicates that the output of Line 3 is a set. And
+         so, since sets are unordered, your own output may be in a different
+         order than what is shown in above. (But your Line 4 should remain the
+         same as shown here, regardless of your own system's print order.)
+        -Notice that the output contains all of the letters of "print" and the
+         letter "z" for the string variable that it processes.
+        -Notice that it does not contain the letters of "set" (but it does
+         contain "{" and "}"). So you won't be able to use the same call to
+         "set()" that you had used back on Line 3 of homework 1.
+         Hint: Lecture 3 shows another way to create a set with only the
+         characters indicated by tis Line 4 comment.
+
+Line 5: This line is blank
+
+Line 6: This creates a string named x holding the value "hello".
+
+Line 7: This creates a dictionary named d holding nothing.
+
+Line 8: z="_______"
+        Note: the "_______" doesn't indicate the relative length of the answer.
+        What do we put inside the string? A command that adds a new item to d.
+
+        What is that new item? To find out, we can execute the string, and
+        then look at the updated contents of d. Line 9 does this, while Line 10
+        presents the expected answer.
+ 
+Line 9: exec(z); print(d)
+Line 10:# {'h': {...}}
+
+        -Notice that Line 10 is a comment. You type it as it is.
+        -Notice that Line 10 indicates that the output of printing d on Line 9
+         is a dictionary with 1 item.
+        -Notice that that item's key is 'h'.
+        -Notice that that item's value is {...}.
+         Wait! What is "{...}"? It is a "..." inside of a "{}". The {} part
+         indicates a dictionary, and the ... part indicates THIS dictionary.
+         But what does that mean? It means that the value is recursive; the
+         dictionary is its own value. (Recall that Lecture 3 had said that
+         dictionary values could be anything -- so what better way to show
+         the flexibility of these values than by using a recursive value?) 
+        
+OK, so maybe that's confusing. But it isn't too hard, right? I mean, aside
+from the confusion about the {...}, we know how to do the rest, right? We
+just say: "d+={'h':???}", right? Actually, no. It's much harder, because you
+can't type an 'h'. Why not? Because line 11 will list all of the symbols you
+can use (and Line 12 will present the expected answer):
+
+Line 11: exec(charactersUsed)
+Line 12: # {'d', '*', ']', '[', '5', 'x', '='}
+
+         This is a bit difficult. One clue is the 'x', because we did create a
+         string x on Line 6. And, in fact, that string did have an 'h' in it.
+         We could access that 'h' with x[0] -- but we can't because Line 12
+         indicates that no '0' is used.
+         We could access that 'h' with x[-5] -- but we can't because Line 12
+         indicates that no '-' is used.
+         So we have to really think about how to get the 'h' out of 'hello',
+         using only 'x', '*', '5', '[', and ']'. Hint: you can use more than
+         one '5' and more than one '*'.
+
+Line 13: This line is blank
+
+Line 14: z="_______"
+         This string must be an expression that tests whether the {...} really
+         is a recursive self-reference to the dictionary d that contains it.
+         
+         Line 15, will run the test and Line 16 will give the expected answer:
+
+Line 15: exec("print("+z+")")
+Line 16: # True
+
+         As shown, we do expect that it truly is a self-reference.
+         Notice that I had to add a "print()" around the z, because z is
+         an expression, not a command -- and expressions only display in
+         interactive mode.
+         Actually, it makes more sense to use "eval" for expressions.
+         This idea is described in Lecture 5, and is demonstrated in Lines 17
+         and 18:
+
+Line 17: print(eval(z))
+Line 18: # True
+
+Finally, Line 19 prints the allowed characters in the Line 14 string, and Line
+20 gives the expected answer:
+
+Line 19: exec(charactersUsed)
+Line 20: # {'d', ']', 'h', '[', 'i', 's', ' ', "'"}
+
