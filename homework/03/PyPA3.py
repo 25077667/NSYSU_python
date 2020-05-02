@@ -1,7 +1,6 @@
 numType = {int: "i", float: "f", complex: "j"}
 otherType = {"s": str, "L": list, "T": tuple, "S": set, "D": dict, "B": bool}
 
-
 def doIfMatches(A, B):
     """This checks if the datatype for object A matches to the format string B
        (which means that it checks whether the last character of B indicates
@@ -35,9 +34,7 @@ def doIfMatches(A, B):
     B = B[:-1] + "s"
     print(B % A, end='')
 
-
 def putfORi(S): return S[:-1]+"f" if (S.find('.') != -1) else S[:-1]+"i"
-
 
 def handleNumbers(A, B):
     """This receives a number A and a format string B. The format string is
@@ -63,7 +60,6 @@ def handleNumbers(A, B):
             print(B % A.imag, end='j')
     else:
         print(B % A, end='')
-
 
 def fprint(__1__, *__2__, __3__=[0]):
     """This receives a single format string, a variable-length argument, and a
@@ -142,7 +138,6 @@ def fprint(__1__, *__2__, __3__=[0]):
         # is end of args and __1__ is '?'
         __3__ = [0]
 
-
 def printf(*__1__):
     """This implements the printf() function. It receives a variable number of
        arguments (including perhaps zero arguments, indicating to do nothing).
@@ -191,7 +186,6 @@ def printf(*__1__):
                 print(fmt_str[i], end='')  # print something not format sting
                 i += 1
         fprint("?")
-
 
 if __name__ == "__main__":
     from testNums import *
