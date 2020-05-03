@@ -52,7 +52,7 @@ def handleNumbers(A, B):
         B = putfORi(B)
         if (B.find('+') != -1):
             print(((B if A.real < 0 else "%" + B[2:]) + "+" +
-                   (B if A.real < 0 else "%" + B[2:]))
+                   (B if A.imag < 0 else "%" + B[2:]))
                   % (A.real, A.imag), end='j')
         elif(A.real):
             print((B + "+" + B) % (A.real, A.imag), end='j')
