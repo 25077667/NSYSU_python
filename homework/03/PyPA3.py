@@ -1,3 +1,4 @@
+# B073040047
 numType = {int: "i", float: "f", complex: "j"}
 otherType = {"s": str, "L": list, "T": tuple, "S": set, "D": dict, "B": bool}
 
