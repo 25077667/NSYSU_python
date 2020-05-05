@@ -169,7 +169,7 @@ def printf(*__1__):
                 pp = re.search(r"^%%", fmt_str[i:])
                 if(pp and pp.start() == 0):
                     print("%", end='')
-                    i += 1
+                    i += 2
                     continue
                 # find the first alpha pass to fprint
                 match = re.search("[aifjsLTSDB]", fmt_str[i:])

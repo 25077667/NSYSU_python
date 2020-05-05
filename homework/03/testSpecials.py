@@ -8,7 +8,7 @@ def testSpecials():
     printf('Any of the following lines will crash:\n')
     #printf('%')
     #printf('%s')
-    #printf('%Q')
+    printf('%Q')
     #printf('%',1)
     #printf('%Q',1)
     #printf('%s','1','2')
