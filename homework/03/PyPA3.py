@@ -35,7 +35,7 @@ def doIfMatches(A, B):
     B = B[:-1] + "s"
     print(B % A, end='')
 
-def putfORi(S): return S[:-1]+"f" if (S.find('.') != -1) else S[:-1]+"i"
+def putfORi(S): return ((S.find('.') != -1) and (S[:-1] + 'f')) or (S[:-1] + 'i')
 
 def handleNumbers(A, B):
     """This receives a number A and a format string B. The format string is
