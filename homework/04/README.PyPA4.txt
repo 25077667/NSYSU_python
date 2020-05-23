@@ -24,13 +24,8 @@ and to print error messages. Consider the following program's output:
 
 % cat testnewtypes.py
 from PyPA4 import *
-<<<<<<< HEAD
-printf("Print as %%S: %S $S\n",{1,2},frozenset({3})) #frozenset converts to set
-printf("Print as %%Z: %Z $Z\n",{1,2},frozenset({3})) #set converts to frozenset
-=======
 printf("Print as %%S: %S %S\n",{1,2},frozenset({3})) #frozenset converts to set
 printf("Print as %%Z: %Z %Z\n",{1,2},frozenset({3})) #set converts to frozenset
->>>>>>> 9831c056f72626b1f55e8788430a08a83f0385b0
 printf("Print as %%s: %s\n",'Hello')
 printf("Print as %%b: %b %b\n", b'Hello', bytearray(b'Bye')) # Convertable
 printf("Print as %%y: %y %y\n", bytearray(b'Hello'), b'Bye') # Convertable
