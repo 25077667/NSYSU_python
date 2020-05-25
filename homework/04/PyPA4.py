@@ -29,8 +29,8 @@ def doIfMatches(A, B):
     if type(A) != otherType[B[-1]]:
         fmt_type = str(repr(otherType[B[-1]]))
         obj_type = str(type(A))
-        raise TypeError("format string expects " + fmt_type[fmt_type.find("'") + 1: -2] +
-                        " not " + obj_type[obj_type.find("'") + 1: -2])
+        return """TypeError("format string expects " + fmt_type[fmt_type.find("'") + 1: -2] +
+                        " not " + obj_type[obj_type.find("'") + 1: -2])"""
 
     S = str(A)
     if B[-1] == 'D':
@@ -46,6 +46,7 @@ def doIfMatches(A, B):
     if B[-1] == 'Z':
         S = "⦓" + S[S.find("{")+1:-2] + "⦔"
     print((B[:-1]+"s") % (S), end="")
+    return ""
 
 
 def putfORi(S): return S[:-1]+("." in S and "f" or "i")
@@ -59,9 +60,17 @@ def handleNumbers(A, B):
         if '+' in B or complex(A).real:
             if '+' in B:
                 B = "%"+B[2:]
-            print(B % (complex(A).real), end="+")
+            try:
+                print(B % (complex(A).real), end="+")
+            except Exception as message:
+                return message
         A = complex(A).imag
-    print(B % (A), end=end)
+    try:
+        print(B % (A), end=end)
+    except Exception as message:
+        return message
+    else:
+        return ""
 
 
 def fprint(c, *v, pos=[0]):
@@ -102,25 +111,28 @@ def fprint(c, *v, pos=[0]):
         - If the datatype of the value stored in "me" is a number, then call	
           handleNumbers(). Otherwise, call doIfMatches().                   """
     pos[0] += 1
+    result = ""
     if c in "*?":
         if c == "?" and pos[0] < len(v):
-            raise SyntaxError(
-                "Error. Extra value arguments given:" + v[pos[0]:])
+            result = """SyntaxError(
+                "Error. Extra value arguments given:" + v[pos[0]:])"""
+            return result
         pos[0] = 0
-        return
+        return ""
     if pos[0] >= len(v):
-        raise SyntaxError("Error. No value argument given for " + c + ".")
+        result = """SyntaxError("Error. No value argument given for " + c + ".")"""
+        return result
     me = v[pos[0]]
     if c[-1] == "a":
         if type(me) in numType:
             me = str(me)
         typpos = list(otherType.values()).index(type(me))
         c = c[:-1]+list(otherType.keys())[typpos]
-
     if type(me) in numType:
-        handleNumbers(me, c)
+        result = handleNumbers(me, c)
     else:
-        doIfMatches(me, c)
+        result = doIfMatches(me, c)
+    return result
 
 
 def printf(*v):
@@ -144,7 +156,7 @@ def printf(*v):
     if type(v[0]) != str:
         raise Exception("Error. No format string.")
 
-    fprint("*")
+    result = fprint("*")
     percent = False
     for c in v[0]:
         if percent:
@@ -153,12 +165,10 @@ def printf(*v):
                 print("%", end="")
                 percent = False
             elif c.isalpha():
-                try:
-                    fprint(code, *v)
-                except (SyntaxError, TypeError, ValueError) as message:
-                    print(message)
-                    raise
-                finally:
+                result = fprint(code, *v)
+                if (result != ""):
+                    exec(result)
+                else:
                     percent = False
         elif c == "%":
             percent = True
