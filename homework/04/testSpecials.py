@@ -8,13 +8,28 @@ def testSpecials():
     printf('The following line will do nothing:\n')
     printf()
     printf('Any of the following lines will crash:\n')
-    # printf('%')
-    # printf('%s')
-    # printf('%Q')
-    # printf('%', 1)
-    # printf('%Q', 1)
-    # printf('%s', '1', '2')
-    printf('1', '2')
+    try:
+        printf('%')
+    finally:
+        try:
+            printf('%s')
+        finally:
+            try:
+                printf('%Q')
+            finally:
+                try:
+                    printf('%', 1)
+                finally:
+                    try:
+                        printf('%Q', 1)
+                    finally:
+                        try:
+                            printf('%s', '1', '2')
+                        finally:
+                            try:
+                                printf('1', '2')
+                            finally:
+                                print("Test spetial finished!")
 
 
 if (__name__ == "__main__"):
