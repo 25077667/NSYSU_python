@@ -1,7 +1,14 @@
+import re
+
+
 class FormattedString():
     """A formattedString object can be printed, accessed, updated, or 
        equality-compared."""
-    def __init__(self,fstr,*args):
+    numType = {int: "i", float: "f", complex: "j"}
+    otherType = {"s": str, "L": list, "T": tuple,
+                 "S": set, "D": dict, "B": bool, "b": bytes, "y": bytearray, "Z": frozenset}
+
+    def __init__(self, fstr, *args):
         """This makes an object holding the information of a formatted string.
         The behavior is to walk through the format string held in the first
         argument, looking for "%" symbols. When one is found, we keep looking
@@ -11,38 +18,51 @@ class FormattedString():
         format type, or if the number of arguments doesn't match the number of
         format specifiers, then an error is generated. 
         Otherwise, the data type is created.                                """
-        ... # Your code goes here. It must do the following steps:
-            #  1. Create an instance attribute holding the format string, fstr
-            #  2. Make use of the __next__ method from below to iterate across
-            #     that instance attribute.
-            #  3. Whenever the next part is a format specifier:
-            #     - Pass that specifier and the corresponding argument from 
-            #       args into a private method that tests whether there are
-            #       any problems (ie, if the format specifier is bad or if the
-            #       corresponding argments type is not compatible with the
-            #       specifier).
-            #       - If there is a problem, raise an error (any type of error,
-            #         because that is not important for this new assignment.
-            #       - Otherwise, the private method simply returns. But note:
-            #         since any problem will have raised an error, to return is
-            #         the indication that there is no error.
-            #       Note also that the implementation of this private method
-            #       involves just reusing code from the previous homework
-            #       solutions.
-            #     - Use the __setitem__ method below to add the corresponding
-            #       argument into some instance list attribute of arguments
-            #  4. If you run out of format specifiers before you run out of
-            #     arguments (or vice versa), then raise an error (any error).
-            
-    def __getitem__(self,position):
+        ...  # Your code goes here. It must do the following steps:
+        #  1. Create an instance attribute holding the format string, fstr
+        #  2. Make use of the __next__ method from below to iterate across
+        #     that instance attribute.
+        #  3. Whenever the next part is a format specifier:
+        #     - Pass that specifier and the corresponding argument from
+        #       args into a private method that tests whether there are
+        #       any problems (ie, if the format specifier is bad or if the
+        #       corresponding argments type is not compatible with the
+        #       specifier).
+        #       - If there is a problem, raise an error (any type of error,
+        #         because that is not important for this new assignment.
+        #       - Otherwise, the private method simply returns. But note:
+        #         since any problem will have raised an error, to return is
+        #         the indication that there is no error.
+        #       Note also that the implementation of this private method
+        #       involves just reusing code from the previous homework
+        #       solutions.
+        #     - Use the __setitem__ method below to add the corresponding
+        #       argument into some instance list attribute of arguments
+        #  4. If you run out of format specifiers before you run out of
+        #     arguments (or vice versa), then raise an error (any error).
+        self.formatted = []
+        self.fstr = fstr
+        self.args = args
+        self.position_in_fstr = 0
+        self.fstrCounter = 0
+
+    def __getitem__(self, position):
         """This returns the argument at the indicated position. It is returned
         as a string created based on its corresponding format specifier."""
-        ... # Your code goes here
+        ...  # Your code goes here
+        if position < len(self.formatted):
+            return self.formatted[position]
+        else:
+            raise IndexError("Out of range")
 
-    def __setitem__(self,position,newValue):
+    def __setitem__(self, position, newValue):
         """This changes the argument stored at the indicated position, but only
         if newValue is compatible with the corresponding format specifier."""
-        ... # Your code goes here
+        ...  # Your code goes here
+        if position < len(self.formatted):
+            self.formatted[position] = newValue
+        else:
+            self.formatted.append(newValue)
 
     def __iter__(self):
         return self
@@ -50,26 +70,141 @@ class FormattedString():
     def __next__(self):
         next_substr_of_fstr = self.__get_next_substr_of_fstr()
         if next_substr_of_fstr == "":
-            self.position_in_fstr=0;
+            self.position_in_fstr = 0
             raise(StopIteration)
         self.position_in_fstr += len(next_substr_of_fstr)
         return next_substr_of_fstr
 
     def __get_next_substr_of_fstr(self):
-        ... # Your code goes here.
-        
+        ...  # Your code goes here.
+        # reach the end
+        if self.position_in_fstr == len(self.fstr):
+            return ""
+
+        percent = False
+        for c in self.fstr[self.position_in_fstr:]:
+            if percent:
+                code = code + c
+                if code == "%%":
+                    return "%"
+                elif c.isalpha():
+                    return code
+            elif c == "%":
+                percent = True
+                code = c
+            else:
+                return c
+        else:
+            if percent:
+                raise Exception("Error. Incomplete format:", code)
+
     def __str__(self):
         """Returns a string which is the string that printf() generates."""
-        ... # Your code goes here. But you must:
-            #  1. Use the __next__ method to step through fstr
-            #  2. Use the __getitem__ method to construct the portions of the
-            #     string that you will be returning. (But note that not every
-            #     step of the fstr iteration will be a format specifier -- some
-            #     steps will return the text in between specifiers. Eg "A%iB%f"
-            #     would yield 4 iterations.
+        ...  # Your code goes here. But you must:
+        #  1. Use the __next__ method to step through fstr
+        #  2. Use the __getitem__ method to construct the portions of the
+        #     string that you will be returning. (But note that not every
+        #     step of the fstr iteration will be a format specifier -- some
+        #     steps will return the text in between specifiers. Eg "A%iB%f"
+        #     would yield 4 iterations.
+        result = ""
+        while(True):
+            try:
+                temp = next(self)
+                if re.search("^%[^%]+", temp):
+                    self.formatted.append(temp)
+                    result += self.gen_fmt_str()
+                    self.fstrCounter += 1
+                elif re.search("^%$", temp):
+                    self.position_in_fstr += 1
+                    result += temp
+                else:
+                    result += temp
+            except StopIteration:
+                break
+            except Exception as message:
+                raise Exception(message)
+        else:
+            if self.fstrCounter < len(self.args):
+                raise SyntaxError("Error. Extra value arguments are given")
+        return result
 
-    def ... # Your code goes here.
-            # Put here any other methods that you need for your implementation.
+    def doIfMatches(self, A, B):
+        """This checks if the datatype for object A matches to the format string B	
+        (which means that it checks whether the last character of B indicates	
+        the datatype of object A).	
+        If they don't match, an error is printed and the program exits.	
+        If they do match, then:	
+            - A is converted to a string.	
+            - If:	
+            - its a dictionary, the {} symbols are converted to «» symbols.	
+            - its a singleton tuple, the , is removed	
+            - it an empty set, it becomes "{}"	
+            - Then print the string, according to the format of B (but B's last	
+            letter needs to first be converted to "s").                       """
+        if B[-1] == 'S' and type(A) == frozenset:
+            A = set(A)
+        if B[-1] == 'Z' and type(A) == set:
+            A = frozenset(A)
+        if B[-1] == 'b' and type(A) == bytearray:
+            A = bytes(A)
+        if B[-1] == 'y' and type(A) == bytes:
+            A = bytearray(A)
+
+        if (type(A) != self.otherType[B[-1]]):
+            fmt_type = str(repr(self.otherType[B[-1]]))
+            obj_type = str(type(A))
+            raise TypeError("format string expects " + fmt_type[fmt_type.find("'") + 1: -2] +
+                            " not " + obj_type[obj_type.find("'") + 1: -2])
+
+        S = str(A)
+        if B[-1] == 'D':
+            S = "«"+S[1:-1]+"»"
+        if B[-1] == 'S' and len(A) == 0:
+            S = "{}"
+        if B[-1] == 'T' and len(A) == 1:
+            S = S[:-2]+")"
+        if B[-1] == "b":
+            S = "'" + S[S.find("'")+1: -1] + "'"
+        if B[-1] == "y":
+            S = '"' + S[S.find("'")+1: -2] + '"'
+        if B[-1] == 'Z':
+            S = "⦓" + S[S.find("{")+1:-2] + "⦔"
+        return (B[:-1]+"s") % S
+
+    def putfORi(self, S): return S[:-1]+("." in S and "f" or "i")
+
+    def handleNumbers(self, A, B):
+        end = ""
+        if B[-1] == "j":
+            end = "j"
+            B = self.putfORi(B)
+            if '+' in B or complex(A).real:
+                if '+' in B:
+                    B = "%" + B[2:]
+                return B % (complex(A).real) + "+" + (B+end) % (complex(A).imag)
+            return (B + "j") % complex(A).imag
+        return str(B % A)
+
+    def gen_fmt_str(self):
+        """ The origin fprint """
+        if self.fstrCounter > len(self.args):
+            raise SyntaxError("Error. No value argument given for " +
+                              self.fstr[self.position_in_fstr:] + ".")
+        #print(self.args, self.fstrCounter)
+        arg = self.args[self.fstrCounter]
+        fmt = self.formatted[self.fstrCounter]
+
+        if fmt[-1] == 'a':
+            if type(arg) in FormattedString.numType:
+                arg = str(arg)
+            fmt = fmt[:-1] + list(FormattedString.otherType.keys()
+                                  )[list(FormattedString.otherType.values()).index(type(arg))]
+        if type(arg) in FormattedString.numType:
+            return self.handleNumbers(arg, fmt)
+        else:
+            return self.doIfMatches(arg, fmt)
+
 
 class printf(FormattedString):
     """NAME
@@ -130,7 +265,7 @@ DESCRIPTION
       There is also a special use of % to not indicate a format string:
        - "%%" - This not a format string, but just the way to print a "%".  """
 
-    def __init__(self,fstr,*args,noprint==False):
+    def __init__(self, fstr, *args, noprint=False):
         """We want the formattedString base (ie, super) class to have access
         to the format string and the arguments. So we will need to use the
         super() function to invoke formattedString's __init__ from inside this
@@ -141,4 +276,7 @@ DESCRIPTION
         Note: Since formattedString is a base class, and since the printf class
               doesn't have a __str__ function, the __str__ will be inherited,
               and so the print will work.  """
-        ... # Your code goes here. (__init__ is the only method of printf.)
+        ...  # Your code goes here. (__init__ is the only method of printf.)
+        if(not noprint):
+            super(printf, self).__init__(fstr, *args)
+            print(self)
