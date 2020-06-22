@@ -71,6 +71,7 @@ class FormattedString():
         next_substr_of_fstr = self.__get_next_substr_of_fstr()
         if next_substr_of_fstr == "":
             self.position_in_fstr = 0
+            self.fstrCounter = 0
             raise(StopIteration)
         self.position_in_fstr += len(next_substr_of_fstr)
         return next_substr_of_fstr
@@ -279,4 +280,4 @@ DESCRIPTION
         ...  # Your code goes here. (__init__ is the only method of printf.)
         if(not noprint):
             super(printf, self).__init__(fstr, *args)
-            print(self)
+            print(self, end='')
